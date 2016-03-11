@@ -17,7 +17,7 @@ $scope.saveTodo = function(){
        .then(function(response){
         initTodos();//give list again
         $scope.newTodo = {};
-  })
+         })
        .catch(function(err){
         console.err(err);
   });
