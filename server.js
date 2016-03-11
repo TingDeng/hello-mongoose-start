@@ -2,38 +2,42 @@ var express = require('express'),
     logger  = require('morgan')('dev'),
     path    = require('path'),
     mongoose = require('mongoose'),
+
     Schema = mongoose.Schema,
     bodyParser = require('body-parser'),
     server  = express();
+//Todo Model
+var todoSchema = new Schema({
+  desc: {
+    type: String,
+    required: true
+  },
+  completed: {
+    type: Boolean,
+    required: true
+  }
+});
 
-    //todo model
-    var todoSchema = new Schema({
-      desc:{
-        type:String,
-        require:true
-      },// desc is subobject
-      completed:{
-        type:Boolean,
-        require:true
-      }
-    });
-var Todo = mongoose.model('Todo',todoSchema);
-//create connection to our db
+var Todo = mongoose.model('Todo', todoSchema);
+
+
+//create a connection to our db
 mongoose.connect('mongodb://localhost/todoApp');
+var port = process.env.PORT || 9000;
 
-var port = process.env.PORT || 8080;
 
 server.use(express.static(path.join(__dirname,'public')));
 server.use(logger);
 server.use(bodyParser.json());
-server.use(bodyParser.urlencoded({extended:true}));
 
+server.use(bodyParser.urlencoded({extended:true}));
 
 server.get('/', function(req, res){
   res.send('this is a starter application, welcome!');
 });//get has to be front of post
 
 server.get('/api/todos', function(req, res){
+
   Todo.find(function(err,todos){
     if(err)throw err;
     res.json(todos);//if don't have, will hang til timeout
@@ -42,7 +46,8 @@ server.get('/api/todos', function(req, res){
 });
 //url means where to find not just web
   //res.send('I got some todos!');
-});
+
+
 server.post('/api/todos', function(req, res){
   var desc = req.body.desc;
   var completed = false//req.body.completed;// 3 now no addtional properties could be add accidentally,
