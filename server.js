@@ -36,8 +36,11 @@ server.get('/', function(req, res){
 server.get('/api/todos', function(req, res){
   Todo.find(function(err,todos){
     if(err)throw err;
-    res.json(todos);
+    res.json(todos);//if don't have, will hang til timeout
   });//url means where to find not just web
+  //res.send('I got some todos!');
+});
+//url means where to find not just web
   //res.send('I got some todos!');
 });
 server.post('/api/todos', function(req, res){
@@ -56,10 +59,27 @@ server.post('/api/todos', function(req, res){
 //  res.send('I saved a todo!'); 1
 });
 server.put('/api/todos/:id', function(req,res){
-  res.send('I updated a todo!');
+  var id=req.params.id;
+  var desc=req.body.desc;
+  var completed=req.body.completed;
+  var update = {
+    desc:desc,
+    completed:completed,
+  };
+  Todo.findOneAndUpdate({_id: id}, update , {new:true} ,function(err, todo){
+    if(err)throw err;
+    res.json(todo);
+  });//3 copy from post man the first id put id after /
+  //3, put them into obj update because we need to send all info, update method in mongoose api
+  //res.send(req.params.id)//2 now go to post man and after / type everything then show everything after /
+  //res.send('I updated a todo!');1
 });//:id is a var as aforeign key to locate _id
 server.delete('/api/todos/:id',function(req,res){
-  res.send('Oh no! I deleted a todo!');
+  Todo.findOneAndRemove({_id: req.params.id},function(err,todo){
+    if(err)throw err;
+    res.json(todo);
+});
+//  res.send('Oh no! I deleted a todo!');
 });//you can check errors on nodemon
   // var someJson = [
   //   {
