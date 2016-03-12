@@ -9,12 +9,18 @@
     <div class='container'>
       <form ng-submit='saveTodo()'>
       <input type='text' ng-model='newTodo.desc'>
-      <button type='submit'>save</button>
+      <button type='submit'>save todo</button>
       </form>
       <hr>
+      <div ng-if='isEditing'>
+        <input type='text' ng-model='editingTodo.desc'>
+        <button type='button'ng-click='updateTodo(editingTodo)'>Save</button>
+      </div>
       <ul>
-        <li ng-repeat='todo in todos'>
-          {{todo.desc}}
+        <li class='well' ng-repeat='todo in todos'>
+          {{todo.desc}}<!---{{todo._id}}-->
+        <button type='button' class='btn btn-sm btn-danger'ng-click='deleteTodo(todo)'>X</button>
+      <button type='button'ng-click='editTodo(todo)'>Edit</button>
         </li>
       </ul>
 
