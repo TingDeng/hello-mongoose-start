@@ -38,7 +38,7 @@ $scope.editTodo=function(todo){
   $scope.editingTodo=todo;
 }
 $scope.updateTodo=function(todo){
-  $http.put('/api/todos'+todo._id,todo)
+  $http.put('/api/todos/'+todo._id,todo)
        .then(function(response){
          $scope.isEditing=false;
          initTodos();
